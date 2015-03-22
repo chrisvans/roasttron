@@ -42,12 +42,15 @@ class Common(Configuration):
         'allauth',  # registration
         'allauth.account',  # registration
         'allauth.socialaccount',  # registration
+        'rest_framework', # django rest framework
     )
 
     # Apps specific for this project go here.
     LOCAL_APPS = (
         'apps.users',  # custom users app
-        # Your stuff: custom apps go here
+        'apps.roast',
+        'apps.temppoint',
+        'apps.coffee',
     )
 
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

@@ -37,6 +37,8 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable avatars
     url(r'^avatar/', include('avatar.urls')),
 
+    url(r'^test/', TemplateView.as_view(template_name='roastTron.html')),
+
     # Your stuff: custom urls go here
 
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

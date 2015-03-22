@@ -1,0 +1,32 @@
+{
+  "name": "roasttron",
+  "version": "0.1.0",
+  "homepage": "https://github.com/chrisvans/roasttron",
+  "dependencies": {},
+  "authors": [
+    "Chris VanSchyndel <chrisvanschyndel@gmail.com>"
+  ],
+  "devDependencies": {
+    "angular": "~1.3.3",
+    "angular-cookies": "~1.3.3",
+    "angular-route": "~1.3.3",
+    "angular-resource": "~1.3.3",
+    "angular-mocks": "~1.3.3",
+    "angular-sanitize": "~1.3.3",
+    "angular-animate": "~1.3.3",
+    "angular-local-storage": "~0.1.5",
+    "karma": "~0.2.2",
+    "angular-nvd3": "~1.0.0-beta"
+  },
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "engines": {
+    "node": ">=0.8.0"
+  }
+}

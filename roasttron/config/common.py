@@ -46,7 +46,7 @@ class Common(Configuration):
 
     # Apps specific for this project go here.
     LOCAL_APPS = (
-        'users',  # custom users app
+        'apps.users',  # custom users app
         # Your stuff: custom apps go here
     )
 
@@ -110,7 +110,7 @@ class Common(Configuration):
 
     # DATABASE CONFIGURATION
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
-    DATABASES = values.DatabaseURLValue('postgres://localhost/roasttron')
+    DATABASES = values.DatabaseURLValue('postgres:///roasttron')
     # END DATABASE CONFIGURATION
 
     # CACHING

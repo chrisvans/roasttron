@@ -22,50 +22,100 @@
 <script src="{% static 'bower_components/nvd3/build/nv.d3.js/' %}"></script>
 <script src="{% static 'bower_components/angular-nvd3/dist/angular-nvd3.js/' %}"></script>
 <script>
-angular.module('someController', ['nvd3'])
-.controller('testController', ['$scope', function($scope) {
-  $scope.data = [{
-      key: "Cumulative Return",
-      values: [
-          { "label" : "A" , "value" : -29.765957771107 },
-          { "label" : "B" , "value" : 0 },
-          { "label" : "C" , "value" : 32.807804682612 },
-          { "label" : "D" , "value" : 196.45946739256 },
-          { "label" : "E" , "value" : 0.19434030906893 },
-          { "label" : "F" , "value" : -98.079782601442 },
-          { "label" : "G" , "value" : -13.925743130903 },
-          { "label" : "H" , "value" : -5.1387322875705 }
-      ]
-  }];
-  $scope.options = {
-      chart: {
-          type: 'discreteBarChart',
-          height: 450,
-          margin : {
-              top: 20,
-              right: 20,
-              bottom: 60,
-              left: 55
-          },
-          x: function(d){ return d.label; },
-          y: function(d){ return d.value; },
-          showValues: true,
-          valueFormat: function(d){
-              return d3.format(',.4f')(d);
-          },
-          transitionDuration: 500,
-          xAxis: {
-              axisLabel: 'X Axis'
-          },
-          yAxis: {
-              axisLabel: 'Y Axis',
-              axisLabelDistance: 30
-          }
+angular.module('routes', [])
+  .factory('paths', [
+    function() {
+      var self = {};
+      self.getAPIPaths = function(basePath) {
+        return {
+          base: basePath,
+          list: basePath + '?format=json',
+          detail: basePath + ':id/?format=json',
+          update: basePath + ':id/',
+          save: basePath
+        }
       }
-  };
+      self.coffee = "{% url 'api-coffee-list' %}"
+      self.roast = "{% url 'api-roast-list' %}"
+      self.temppoint = "{% url 'api-temppoint-list' %}"
+      return self;
+    }
+  ])
+angular.module('someController', ['nvd3', 'routes', 'roastTron.roast.services'])
+.controller('testController', ['$scope', 'Roast', 
+  function($scope, Roast) {
+    $scope.data = [];
 
-  console.log($scope);
-}])
+    Roast.all().$promise.then(function(response) {
+      for (var i=0; i<response.results.length; i++) {
+        $scope.data.push(
+          {
+            key: response.results[i].name,
+            values: response.results[i].profile_data
+          }
+        )
+      }
+    })
+    // $scope.data = [{
+    //     key: "Profile 1",
+    //     values: [
+    //         { "x" : 1, "y": 2 },
+    //         { "x" : 2, "y": 3 },
+    //         { "x" : 3, "y": 4 },
+    //         { "x" : 4, "y": 5 },
+    //     ]
+    // }];
+    $scope.temperature = 'F'
+    $scope.options = {
+      "chart": {
+        "type": "lineChart",
+        "height": 450,
+        "margin": {
+          "top": 20,
+          "right": 20,
+          "bottom": 40,
+          "left": 55
+        },
+        "useInteractiveGuideline": true,
+        "dispatch": {},
+        "xAxis": {
+          "axisLabel": "Time (seconds)"
+        },
+        "yAxis": {
+          "axisLabel": "Temperature (" + $scope.temperature + ")",
+          //"axisLabelDistance": 30
+        },
+        "transitionDuration": 250
+      },
+      "title": {
+        "enable": true,
+        "text": "Profiles"
+      }
+      // "subtitle": {
+      //   "enable": true,
+      //   "text": "Subtitle for simple line chart. Lorem ipsum dolor sit amet, at eam blandit sadipscing, vim adhuc sanctus disputando ex, cu usu affert alienum urbanitas.",
+      //   "css": {
+      //     "text-align": "center",
+      //     "margin": "10px 13px 0px 7px"
+      //   }
+      // },
+      // "caption": {
+      //   "enable": true,
+      //   "html": "<b>Figure 1.</b> Lorem ipsum dolor sit amet, at eam blandit sadipscing, <span style=\"text-decoration: underline;\">vim adhuc sanctus disputando ex</span>, cu usu affert alienum urbanitas. <i>Cum in purto erat, mea ne nominavi persecuti reformidans.</i> Docendi blandit abhorreant ea has, minim tantas alterum pro eu. <span style=\"color: darkred;\">Exerci graeci ad vix, elit tacimates ea duo</span>. Id mel eruditi fuisset. Stet vidit patrioque in pro, eum ex veri verterem abhorreant, id unum oportere intellegam nec<sup>[1, <a href=\"https://github.com/krispo/angular-nvd3\" target=\"_blank\">2</a>, 3]</sup>.",
+      //   "css": {
+      //     "text-align": "justify",
+      //     "margin": "10px 13px 0px 7px"
+      //   }
+      // }
+    };
+  }
+])
 </script>
-<script src="{% static 'roastTron/app.js/' %}"></script>
+<script type="text/javscript" src="{% static 'roastTron/app.js/' %}"></script>
+
+<script type="text/javascript" src="{% static 'roastTron/coffee/services.js/' %}"></script>
+
+<script type="text/javascript" src="{% static 'roastTron/roast/services.js/' %}"></script>
+
+<script type="text/javascript" src="{% static 'roastTron/temppoint/services.js/' %}"></script>
 {% endblock javascript %}

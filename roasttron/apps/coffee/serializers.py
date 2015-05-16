@@ -9,4 +9,4 @@ class CoffeeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Coffee
-        fields = ('id', 'name', 'slug',)
+        fields = ('id', 'name', 'slug')

@@ -7,7 +7,12 @@ angular.module('roastTron', [
   'ngCookies',
   'nvd3',
 
+  'routes',
   'someController',
+
+  'roastTron.coffee.services',
+  'roastTron.roast.services',
+  'roastTron.temppoint.services'
 
 ])
 

@@ -1,0 +1,10 @@
+<ul>
+  <li ng-repeat="object in listData.results"
+      ng-click="showDetail(object)">
+    [[ object.name ]]
+  </li>
+</ul>
+
+<div ng-controller="roastDetailCtrl"
+     ng-include="staticPath.path('roastTron/roast/detailView.html')">
+</div>

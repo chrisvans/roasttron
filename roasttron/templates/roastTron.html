@@ -1,142 +1,83 @@
-{% extends 'base.html' %}
 {% load staticfiles i18n %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}roasttron{% endblock title %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-{% block css %}
-<link rel="stylesheet" href="{% static 'bower_components/nvd3/build/nv.d3.css/' %}">
-{% endblock css %}
 
-{% block content %}
-<div ng-app='someController'>
-    <div ng-controller="testController">
-        <nvd3 options='options' data='data' config='config'></nvd3>
+    <link rel="stylesheet" href="{% static 'bower_components/nvd3/build/nv.d3.css/' %}">
+
+    <script src="{% static 'bower_components/angular/angular.js/' %}"></script>
+    <script src="{% static 'bower_components/angular-route/angular-route.js/' %}"></script>
+    <script src="{% static 'bower_components/angular-resource/angular-resource.js/' %}"></script>
+    <script src="{% static 'bower_components/angular-cookies/angular-cookies.js/' %}"></script>
+    <script src="{% static 'bower_components/d3/d3.js/' %}"></script>
+    <script src="{% static 'bower_components/nvd3/build/nv.d3.js/' %}"></script>
+    <script src="{% static 'bower_components/angular-nvd3/dist/angular-nvd3.js/' %}"></script>
+
+  </head>
+
+  <body ng-app="roastTron" ng-controller="main">
+    <div ng-view>
     </div>
-</div>
-{% endblock content %}
-
-{% block javascript %}
-<script src="{% static 'bower_components/angular/angular.js/' %}"></script>
-<script src="{% static 'bower_components/angular-route/angular-route.js/' %}"></script>
-<script src="{% static 'bower_components/angular-resource/angular-resource.js/' %}"></script>
-<script src="{% static 'bower_components/angular-cookies/angular-cookies.js/' %}"></script>
-<script src="{% static 'bower_components/d3/d3.js/' %}"></script>
-<script src="{% static 'bower_components/nvd3/build/nv.d3.js/' %}"></script>
-<script src="{% static 'bower_components/angular-nvd3/dist/angular-nvd3.js/' %}"></script>
-<script>
-angular.module('routes', [])
-  .factory('paths', [
-    function() {
-      var self = {};
-      self.getAPIPaths = function(basePath) {
-        return {
-          base: basePath,
-          list: basePath + '?format=json',
-          detail: basePath + ':id/?format=json',
-          update: basePath + ':id/',
-          save: basePath
-        }
-      }
-      self.coffee = "{% url 'api-coffee-list' %}"
-      self.roast = "{% url 'api-roast-list' %}"
-      self.temppoint = "{% url 'api-temppoint-list' %}"
-      return self;
-    }
-  ])
-angular.module('someController', ['nvd3', 'routes', 'roastTron.roast.services'])
-.controller('testController', ['$scope', '$timeout', 'Roast', 
-  function($scope, $timeout, Roast) {
-    $scope.data = [];
-
-    Roast.all().$promise.then(function(response) {
-      for (var i=0; i<response.results.length; i++) {
-        $scope.data.push(
-          {
-            key: response.results[i].name,
-            values: response.results[i].profile_data
+  </body>
+  <script>
+  angular.module('routes', [])
+    .factory('paths', [
+      function() {
+        var self = {};
+        self.getAPIPaths = function(basePath) {
+          return {
+            base: basePath,
+            list: basePath + '?format=json',
+            detail: basePath + ':id/?format=json',
+            update: basePath + ':id/',
+            save: basePath
           }
-        )
+        }
+        self.coffee = "{% url 'api-coffee-list' %}"
+        self.roast = "{% url 'api-roast-list' %}"
+        self.temppoint = "{% url 'api-temppoint-list' %}"
+        return self;
       }
-    })
+    ])
+    .provider('staticPath', [
+      function() {
 
-    // Test:
-    // var timeoutthing = 20;
-    // var tick = function() {
-    //   $timeout(function() {
-    //     timeoutthing = timeoutthing + 1;
-    //     $scope.data[0]['values'].push({ x: timeoutthing, y: (timeoutthing - 20) * 2 })
-    //     tick();
-    //   }, 1500)
-    // }
-    // tick();
+        var self = this
 
-    // $scope.data = [{
-    //     key: "Profile 1",
-    //     values: [
-    //         { "x" : 1, "y": 2 },
-    //         { "x" : 2, "y": 3 },
-    //         { "x" : 3, "y": 4 },
-    //         { "x" : 4, "y": 5 },
-    //     ]
-    // }];
-    $scope.temperature = 'F'
-    $scope.config = {
-      refreshDataOnly: true
-    }
-    $scope.options = {
-      chart: {
-        type: "lineChart",
-        height: 450,
-        margin: {
-          top: 20,
-          right: 20,
-          bottom: 40,
-          left: 55
-        },
-        y: function(d) {
-          return +d.y
-        },
-        useInteractiveGuideline: true,
-        dispatch: {},
-        xAxis: {
-          axisLabel: "Time (seconds)"
-        },
-        yAxis: {
-          axisLabel: "Temperature (" + $scope.temperature + ")",
-          tickFormat: function(d){
-            return d3.format('.01f')(d);
-          },
-          //"axisLabelDistance": 30
-        },
-        transitionDuration: 250,
-      },
-      title: {
-        enable: true,
-        text: "Profiles"
+        self.URL = '{% static '' %}';
+        self.path = function(path) {
+
+          var URLArray = self.URL.split('/');
+          var staticPathArray = URLArray.slice(0, URLArray.length-1)
+          if (path[0] !== '/') {
+            path = '/' + path;
+          }
+          return staticPathArray.join('/') + path
+        }
+
+        self.$get = function() {
+          return self;
+        }
+        return self;
       }
-      // "subtitle": {
-      //   "enable": true,
-      //   "text": "Subtitle for simple line chart. Lorem ipsum dolor sit amet, at eam blandit sadipscing, vim adhuc sanctus disputando ex, cu usu affert alienum urbanitas.",
-      //   "css": {
-      //     "text-align": "center",
-      //     "margin": "10px 13px 0px 7px"
-      //   }
-      // },
-      // "caption": {
-      //   "enable": true,
-      //   "html": "<b>Figure 1.</b> Lorem ipsum dolor sit amet, at eam blandit sadipscing, <span style=\"text-decoration: underline;\">vim adhuc sanctus disputando ex</span>, cu usu affert alienum urbanitas. <i>Cum in purto erat, mea ne nominavi persecuti reformidans.</i> Docendi blandit abhorreant ea has, minim tantas alterum pro eu. <span style=\"color: darkred;\">Exerci graeci ad vix, elit tacimates ea duo</span>. Id mel eruditi fuisset. Stet vidit patrioque in pro, eum ex veri verterem abhorreant, id unum oportere intellegam nec<sup>[1, <a href=\"https://github.com/krispo/angular-nvd3\" target=\"_blank\">2</a>, 3]</sup>.",
-      //   "css": {
-      //     "text-align": "justify",
-      //     "margin": "10px 13px 0px 7px"
-      //   }
-      // }
-    };
-  }
-])
-</script>
-<script type="text/javscript" src="{% static 'roastTron/app.js/' %}"></script>
+    ])
+  </script>
 
-<script type="text/javascript" src="{% static 'roastTron/coffee/services.js/' %}"></script>
+  <script type="text/javascript" src="{% static 'roastTron/shared/controllers.js/' %}"></script>
+  <script type="text/javascript" src="{% static 'roastTron/coffee/services.js/' %}"></script>
 
-<script type="text/javascript" src="{% static 'roastTron/roast/services.js/' %}"></script>
+  <script type="text/javascript" src="{% static 'roastTron/roast/services.js/' %}"></script>
+  <script type="text/javascript" src="{% static 'roastTron/roast/listController.js/' %}"></script>
+  <script type="text/javascript" src="{% static 'roastTron/roast/detailController.js/' %}"></script>
 
-<script type="text/javascript" src="{% static 'roastTron/temppoint/services.js/' %}"></script>
-{% endblock javascript %}
+  <script type="text/javascript" src="{% static 'roastTron/temppoint/services.js/' %}"></script>
+
+  <script type="text/javascript" src="{% static 'roastTron/app.js/' %}"></script>
+
+</html>

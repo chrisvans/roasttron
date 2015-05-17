@@ -13,7 +13,6 @@ angular.module('roastTron.roast.detail', [])
     }
     
     if ($routeParams.id) {
-      console.log($routeParams.id)
       Roast.get($routeParams.id).$promise.then(function(response) {
         $scope.object = response;
         $scope.setData();

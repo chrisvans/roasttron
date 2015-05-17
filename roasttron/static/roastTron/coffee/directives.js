@@ -1,9 +1,9 @@
 'use strict';
 
-angular.module('roastTron.roast.directives', ['ngRoute'])
+angular.module('roastTron.coffee.directives', ['ngRoute'])
 
-.directive('roastCreate', ['$rootScope', 'Roast',
-  function($rootScope, Roast) {
+.directive('coffeeCreate', ['$rootScope', 'Coffee',
+  function($rootScope, Coffee) {
     return {
       restrict: 'A',
       scope: {
@@ -13,21 +13,21 @@ angular.module('roastTron.roast.directives', ['ngRoute'])
       link: function(scope, element, attrs) {
         var formSave = function() {
           if (scope.form.$valid) {
-            Roast.save(scope.obj).$promise.then(function(response) {
-              $rootScope.$broadcast('roast.create.success')
-              $rootScope.$broadcast('roast.list.add', response)
-              $rootScope.$broadcast('roast.form.create.reset')
+            Coffee.save(scope.obj).$promise.then(function(response) {
+              $rootScope.$broadcast('coffee.create.success')
+              $rootScope.$broadcast('coffee.list.add', response)
+              $rootScope.$broadcast('coffee.form.create.reset')
               scope.form.$setPristine();
               scope.form.$setUntouched();
             }, function(error) {
-              $rootScope.$broadcast('roast.create.error', error)
+              $rootScope.$broadcast('coffee.create.error', error)
             })
           }
         }
         element.bind('click', function(event) {
           formSave()
         })
-        scope.$on('roast.create.form.submit', function() {
+        scope.$on('coffee.create.form.submit', function() {
           formSave()
         })
       }
@@ -35,8 +35,8 @@ angular.module('roastTron.roast.directives', ['ngRoute'])
   }
 ])
 
-.directive('roastDelete', ['$rootScope', 'Roast',
-  function($rootScope, Roast) {
+.directive('coffeeDelete', ['$rootScope', 'Coffee',
+  function($rootScope, Coffee) {
     return {
       restrict: 'A',
       scope: {
@@ -46,12 +46,12 @@ angular.module('roastTron.roast.directives', ['ngRoute'])
       },
       link: function(scope, element, attrs) {
         element.bind('click', function() {
-          Roast.delete(scope.obj).$promise.then(function(response) {
+          Coffee.delete(scope.obj).$promise.then(function(response) {
             if (scope.list && scope.index) {
               scope.list.splice(scope.index, 1);
             }
           }, function(error) {
-            $rootScope.$broadcast('roast.delete.error', error);
+            $rootScope.$broadcast('coffee.delete.error', error);
           })
         })
       }
@@ -59,19 +59,19 @@ angular.module('roastTron.roast.directives', ['ngRoute'])
   }
 ])
 
-.directive('roastFormNameInput', ['$rootScope',
+.directive('coffeeFormNameInput', ['$rootScope',
   function($rootScope) {
     return {
       restrict: 'A',
       scope: {},
       link: function(scope, element, attrs) {
-        scope.$on('roast.form.create.focus', function(event) {
+        scope.$on('coffee.form.create.focus', function(event) {
           element[0].focus();
         })
         element.bind("keyup", function(event) {
           if (event.which === 13) {
             element[0].blur();
-            $rootScope.$broadcast('roast.create.form.submit')
+            $rootScope.$broadcast('coffee.create.form.submit')
           }
         })
       }

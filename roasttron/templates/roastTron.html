@@ -22,8 +22,8 @@
   </head>
 
   <body ng-app="roastTron" ng-controller="main">
-    <div ng-controller="roastListCtrl"
-         ng-include="staticPath.path('roastTron/roast/listView.html')">
+    <div ng-controller="coffeeListCtrl"
+         ng-include="staticPath.path('roastTron/coffee/listView.html')">
     </div>
     <div ng-view>
     </div>
@@ -73,6 +73,9 @@
   </script>
 
   <script type="text/javascript" src="{% static 'roastTron/shared/controllers.js/' %}"></script>
+
+  <script type="text/javascript" src="{% static 'roastTron/coffee/listController.js/' %}"></script>
+  <script type="text/javascript" src="{% static 'roastTron/coffee/directives.js/' %}"></script>
   <script type="text/javascript" src="{% static 'roastTron/coffee/services.js/' %}"></script>
 
   <script type="text/javascript" src="{% static 'roastTron/roast/listController.js/' %}"></script>

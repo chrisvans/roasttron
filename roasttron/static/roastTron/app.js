@@ -11,6 +11,8 @@ angular.module('roastTron', [
 
   'roastTron.shared.controllers',
 
+  'roastTron.coffee.list',
+  'roastTron.coffee.directives',
   'roastTron.coffee.services',
 
   'roastTron.roast.detail',

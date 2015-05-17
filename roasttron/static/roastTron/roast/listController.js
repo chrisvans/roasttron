@@ -10,7 +10,7 @@ angular.module('roastTron.roast.list', ['ngRoute'])
 
     // --> METHODS
     $scope.showDetail = function(object) {
-      $location.path('/roast/' + object.id)
+      $location.path('/coffee/' + $scope.coffee + '/roast/' + object.id)
     }
 
     $scope.initCreateForm = function() {
@@ -33,7 +33,7 @@ angular.module('roastTron.roast.list', ['ngRoute'])
 
     // --> INIT
     // TODO: Restrict to roasts that the current User owns!
-    Roast.all().$promise.then(function(response) {
+    Roast.all({coffee:$scope.coffee}).$promise.then(function(response) {
       $scope.listData = response;
     });
 

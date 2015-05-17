@@ -1,12 +1,12 @@
 <ul>
-  <li ng-click="showCreateForm()">
-    + Create a new profile 
+  <li ng-click="showCreateForm();">
+    + Create a new coffee
   </li>
   <li ng-repeat="object in listData.results">
     <span ng-click="showDetail(object)">
-      [[ object.name ]]
+      [[object.name]]
     </span>
-    <span roast-delete
+    <span coffee-delete 
           obj="object"
           list="listData.results"
           index="$index">
@@ -14,26 +14,31 @@
     </span>
   </li>
 </ul>
+
 <ng-form ng-show="createFormVisible"
          name="createForm">
   <label for="name">
-    Name your profile:
+    Name your coffee:
   </label>
   <input name="name"
-         ng-model="newRoast.name"
-         roast-form-name-input
-         placeholder="Name your profile and hit enter to begin"
+         ng-model="newCoffee.name"
+         coffee-form-name-input
+         placeholder="Name your coffee and hit enter"
          required>
   </input>
   <div ng-show="createForm.name.$touched && createForm.name.$error.required">
     This field is required.
   </div>
-  <div roast-create
+  <div coffee-create
        form="createForm"
-       obj="newRoast"> 
-    Begin recording
+       obj="newCoffee"> 
+    Submit
   </div>
-  <div ng-click="hideCreateForm(); initCreateForm();">
+  <div ng-click="hideCreateForm(); initCreateForm(); createForm.$setPristine(); createForm.$setUntouched()">
     Cancel
   </div>
 </ng-form>
+
+<div ng-controller="roastListCtrl"
+     ng-include="staticPath.path('roastTron/roast/listView.html')">
+</div>

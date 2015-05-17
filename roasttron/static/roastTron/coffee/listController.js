@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('roastTron.coffee.list', ['ngRoute'])
+angular.module('roastTron.coffee.list', [])
 
 .controller(
   'coffeeListCtrl',
@@ -8,10 +8,6 @@ angular.module('roastTron.coffee.list', ['ngRoute'])
   function($scope, $location, $timeout, Coffee) {
 
     // METHODS -->
-    $scope.showDetail = function(object) {
-      $location.path('/coffee/' + object.id)
-    }
-
     $scope.initCreateForm = function() {
       $scope.newCoffee = {
       }
@@ -41,6 +37,12 @@ angular.module('roastTron.coffee.list', ['ngRoute'])
     // LISTENERS -->
     $scope.$on('coffee.list.add', function(event, data) {
       $scope.listData.results.push(data);
+    })
+
+    $scope.$on('coffee.list.remove', function(event, index) {
+      // Ensure current detail view is not being removed
+      $scope.listData.results.splice(index, 1);
+      // Reload list if too small, or on some condition that makes sense
     })
 
     $scope.$on('coffee.form.create.reset', function(event) {

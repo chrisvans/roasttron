@@ -3,12 +3,11 @@
     + Create a new profile 
   </li>
   <li ng-repeat="object in listData.results">
-    <span ng-click="showDetail(object)">
+    <span ui-sref="coffee.roast.detail({coffeeid:object.coffee, id:object.id})">
       [[ object.name ]]
     </span>
     <span roast-delete
           obj="object"
-          list="listData.results"
           index="$index">
       x
     </span>
@@ -37,3 +36,6 @@
     Cancel
   </div>
 </ng-form>
+
+<ui-view>
+</ui-view>

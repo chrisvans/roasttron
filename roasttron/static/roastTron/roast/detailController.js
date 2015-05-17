@@ -3,23 +3,23 @@
 angular.module('roastTron.roast.detail', [])
 
 
-.config([
-  '$routeProvider', 'staticPathProvider',
-  function($routeProvider, staticPathProvider) {
-    $routeProvider.when(
-      '/roast/:id',
-      {
-        controller: 'roastDetailCtrl',
-        templateUrl: staticPathProvider.path('roastTron/roast/detailView.html'),
-      }
-    );
-  }
-])
+// .config([
+//   '$routeProvider', 'staticPathProvider',
+//   function($routeProvider, staticPathProvider) {
+//     $routeProvider.when(
+//       '/roast/:id',
+//       {
+//         controller: 'roastDetailCtrl',
+//         templateUrl: staticPathProvider.path('roastTron/roast/detailView.html'),
+//       }
+//     );
+//   }
+// ])
 
 .controller(
   'roastDetailCtrl',
-  ['$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'Roast', 'TempPoint',
-  function($rootScope, $scope, $routeParams, $location, $timeout, Roast, TempPoint) {
+  ['$rootScope', '$scope', '$stateParams', '$state', '$location', '$timeout', 'Roast', 'TempPoint',
+  function($rootScope, $scope, $stateParams, $state, $location, $timeout, Roast, TempPoint) {
 
     // METHODS -->
     $scope.initChart = function() {
@@ -104,7 +104,7 @@ angular.module('roastTron.roast.detail', [])
       simulateProfile()
       // Replace with temppoint api call with filters to grab only relevant points
       var tick = function() {
-        Roast.get($routeParams.id).$promise.then(function(response) {
+        Roast.get($stateParams.id).$promise.then(function(response) {
           $scope.object.profile_data = response.profile_data
           $scope.setData();
           if ($scope.recording) {
@@ -123,7 +123,7 @@ angular.module('roastTron.roast.detail', [])
       data: []
     }
     
-    Roast.get($routeParams.id).$promise.then(function(response) {
+    Roast.get($stateParams.id).$promise.then(function(response) {
       $scope.object = response;
       $scope.setData();
       if ($scope.recording) {
@@ -131,7 +131,7 @@ angular.module('roastTron.roast.detail', [])
       }
     }, function(error) {
       $rootScope.$broadcast('roast.detail.error', error)
-      $location.path('/roast/')
+      $state.go('coffee.roast', {coffeeid: $stateParams.coffeeid})
     })
 
     $scope.initChart();

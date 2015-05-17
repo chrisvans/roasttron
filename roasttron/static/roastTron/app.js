@@ -2,11 +2,14 @@
 
 // Declare app level module which depends on views, and components
 angular.module('roastTron', [
-
-  'ngRoute',
+  // Angular
   'ngCookies',
-  'nvd3',
 
+  // Third Party
+  'nvd3',
+  'ui.router',
+
+  // Ours
   'routes',
 
   'roastTron.shared.controllers',
@@ -22,6 +25,35 @@ angular.module('roastTron', [
 
   'roastTron.temppoint.services'
 
+])
+
+.config(['$stateProvider', '$urlRouterProvider', 'staticPathProvider',
+  function($stateProvider, $urlRouterProvider, staticPathProvider) {
+
+  //$urlRouterProvider.otherwise("/404");
+
+  $stateProvider
+    .state('coffee', {
+      url: "/coffee",
+      templateUrl: staticPathProvider.path("roastTron/coffee/listView.html"),
+      controller: 'coffeeListCtrl'
+    })
+    // .state('coffee.detail', {
+    //   url: "/coffee/:id",
+    //   templateUrl: staticPathProvider.path("roastTron/coffee/listView.html"),
+    //   controller: 'coffeeDetailCtrl'
+    // })
+    .state('coffee.roast', {
+      url: "/:coffeeid/roast",
+      templateUrl: staticPathProvider.path("roastTron/roast/listView.html"),
+      controller: 'roastListCtrl'
+    })
+    .state('coffee.roast.detail', {
+      url: "/:id",
+      templateUrl: staticPathProvider.path("roastTron/roast/detailView.html"),
+      controller: 'roastDetailCtrl'
+    });
+  }
 ])
 
 .config(['$interpolateProvider', function($interpolateProvider) {

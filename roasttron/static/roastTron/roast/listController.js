@@ -1,21 +1,18 @@
 'use strict';
 
-angular.module('roastTron.roast.list', ['ngRoute'])
+angular.module('roastTron.roast.list', [])
 
 .controller(
   'roastListCtrl',
-  ['$rootScope', '$scope', '$location', '$timeout', 'Roast',
-  function($rootScope, $scope, $location, $timeout, Roast) {
+  ['$rootScope', '$scope', '$timeout', '$state', '$stateParams', 'Roast',
+  function($rootScope, $scope, $timeout, $state, $stateParams, Roast) {
 
 
     // --> METHODS
-    $scope.showDetail = function(object) {
-      $location.path('/coffee/' + $scope.coffee + '/roast/' + object.id)
-    }
 
     $scope.initCreateForm = function() {
       $scope.newRoast = {
-        coffee: $scope.coffee
+        coffee: $stateParams.coffeeid
       }
     }
 
@@ -33,12 +30,9 @@ angular.module('roastTron.roast.list', ['ngRoute'])
 
     // --> INIT
     // TODO: Restrict to roasts that the current User owns!
-    Roast.all({coffee:$scope.coffee}).$promise.then(function(response) {
+    Roast.all({coffee:$stateParams.coffeeid}).$promise.then(function(response) {
       $scope.listData = response;
     });
-
-    // TODO: Replace this with real data
-    $scope.coffee = 3;
 
     $scope.initCreateForm();
     // <-- INIT
@@ -47,10 +41,16 @@ angular.module('roastTron.roast.list', ['ngRoute'])
     // --> LISTENERS
     $scope.$on('roast.list.add', function(event, data) {
       $scope.listData.results.push(data);
-      $location.path('/roast/' + data.id)
+      $state.go('coffee.roast.detail', {coffeeid: data.coffee, id: data.id})
       $timeout(function() {
         $rootScope.$broadcast('roast.detail.recording')
       })
+    })
+
+    $scope.$on('roast.list.remove', function(event, index) {
+      // Ensure current detail view is not being removed.
+      $scope.listData.results.splice(index, 1);
+      // Reload list on some condition
     })
 
     $scope.$on('roast.form.create.reset', function(event) {

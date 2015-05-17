@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{% static 'bower_components/nvd3/build/nv.d3.css/' %}">
 
     <script src="{% static 'bower_components/angular/angular.js/' %}"></script>
-    <script src="{% static 'bower_components/angular-route/angular-route.js/' %}"></script>
+    <script src="{% static 'bower_components/angular-ui-router/release/angular-ui-router.js/' %}"></script>
     <script src="{% static 'bower_components/angular-resource/angular-resource.js/' %}"></script>
     <script src="{% static 'bower_components/angular-cookies/angular-cookies.js/' %}"></script>
     <script src="{% static 'bower_components/d3/d3.js/' %}"></script>
@@ -22,11 +22,16 @@
   </head>
 
   <body ng-app="roastTron" ng-controller="main">
-    <div ng-controller="coffeeListCtrl"
+    <!--<div ng-controller="coffeeListCtrl"
          ng-include="staticPath.path('roastTron/coffee/listView.html')">
+    </div>-->
+    <div>
+      <li ui-sref="coffee">
+        Back to Coffees
+      </li>
     </div>
-    <div ng-view>
-    </div>
+    <ui-view>
+    </ui-view>
   </body>
   <script>
   angular.module('routes', [])

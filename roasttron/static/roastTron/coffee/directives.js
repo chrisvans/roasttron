@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('roastTron.coffee.directives', ['ngRoute'])
+angular.module('roastTron.coffee.directives', [])
 
 .directive('coffeeCreate', ['$rootScope', 'Coffee',
   function($rootScope, Coffee) {
@@ -41,14 +41,13 @@ angular.module('roastTron.coffee.directives', ['ngRoute'])
       restrict: 'A',
       scope: {
         obj: '=',
-        list: '=?',
         index: '=?',
       },
       link: function(scope, element, attrs) {
         element.bind('click', function() {
           Coffee.delete(scope.obj).$promise.then(function(response) {
-            if (scope.list && scope.index) {
-              scope.list.splice(scope.index, 1);
+            if (scope.index) {
+              $rootScope.$broadcast('coffee.list.remove', scope.index);
             }
           }, function(error) {
             $rootScope.$broadcast('coffee.delete.error', error);

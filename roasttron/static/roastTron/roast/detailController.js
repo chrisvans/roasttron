@@ -2,25 +2,26 @@
 
 angular.module('roastTron.roast.detail', [])
 
+
+.config([
+  '$routeProvider', 'staticPathProvider',
+  function($routeProvider, staticPathProvider) {
+    $routeProvider.when(
+      '/roast/:id',
+      {
+        controller: 'roastDetailCtrl',
+        templateUrl: staticPathProvider.path('roastTron/roast/detailView.html'),
+      }
+    );
+  }
+])
+
 .controller(
   'roastDetailCtrl',
-  ['$scope', '$routeParams', '$location', 'Roast',
-  function($scope, $routeParams, $location, Roast) {
+  ['$rootScope', '$scope', '$routeParams', '$location', '$timeout', 'Roast', 'TempPoint',
+  function($rootScope, $scope, $routeParams, $location, $timeout, Roast, TempPoint) {
 
-    // INIT -->
-    $scope.chart = {
-      data: []
-    }
-    
-    if ($routeParams.id) {
-      Roast.get($routeParams.id).$promise.then(function(response) {
-        $scope.object = response;
-        $scope.setData();
-      }, function(error) {
-        $location.path('/roast/')
-      })
-    }
-
+    // METHODS -->
     $scope.initChart = function() {
       $scope.chart.temperature = 'F'
 
@@ -74,14 +75,75 @@ angular.module('roastTron.roast.detail', [])
       }
     }
 
+    $scope.beginRecording = function() {
+
+      var simulateProfile = function() {
+        var currentReading = 1
+        var currentTime = 1
+        var tick = function() {
+          TempPoint.save(
+            {
+              roast: $scope.object.id, 
+              reading: currentReading, 
+              time: currentTime
+            }
+          ).$promise.then(
+            function(response) {
+              currentReading = currentReading + 4
+              currentTime = currentTime + 1
+              if ($scope.recording) {
+                $timeout(function() {
+                  tick()
+                }, 500)
+              }
+            }
+          )
+        }
+        tick();
+      }
+      simulateProfile()
+      // Replace with temppoint api call with filters to grab only relevant points
+      var tick = function() {
+        Roast.get($routeParams.id).$promise.then(function(response) {
+          $scope.object.profile_data = response.profile_data
+          $scope.setData();
+          if ($scope.recording) {
+            $timeout(function() {
+              tick()
+            }, 1000)
+          }
+        })
+      }
+      tick()
+    }
+    // <-- METHODS
+
+    // INIT -->
+    $scope.chart = {
+      data: []
+    }
+    
+    Roast.get($routeParams.id).$promise.then(function(response) {
+      $scope.object = response;
+      $scope.setData();
+      if ($scope.recording) {
+        $scope.beginRecording();
+      }
+    }, function(error) {
+      $rootScope.$broadcast('roast.detail.error', error)
+      $location.path('/roast/')
+    })
+
     $scope.initChart();
 
     // <-- INIT
 
-    // --> LISTENERS
-    $scope.$on('roast.list.select', function(event, data) {
-      $scope.object = data;
-      $scope.setData();
+    // LISTENERS -->
+    $scope.$on('roast.detail.recording', function() {
+      $scope.recording = true;
+      if ($scope.object) {
+        $scope.beginRecording();
+      }
     })
     // <-- LISTENERS
 

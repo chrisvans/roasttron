@@ -1,10 +1,32 @@
 <ul>
+  <li ng-click="showCreateForm()">
+    + Create a new profile 
+  </li>
   <li ng-repeat="object in listData.results"
       ng-click="showDetail(object)">
     [[ object.name ]]
   </li>
 </ul>
-
-<div ng-controller="roastDetailCtrl"
-     ng-include="staticPath.path('roastTron/roast/detailView.html')">
-</div>
+<ng-form ng-show="createFormVisible"
+         name="createForm">
+  <label for="name">
+    Name your profile:
+  </label>
+  <input name="name"
+         ng-model="newRoast.name"
+         roast-form-name-input
+         placeholder="Name your profile and hit enter to begin"
+         required>
+  </input>
+  <div ng-show="createForm.name.$touched && createForm.name.$error.required">
+    This field is required.
+  </div>
+  <div roast-create
+       form="createForm"
+       obj="newRoast"> 
+    Begin recording
+  </div>
+  <div ng-click="hideCreateForm(); initCreateForm(); createForm.$setPristine(); createForm.$setUntouched()">
+    Cancel
+  </div>
+</ng-form>

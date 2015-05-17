@@ -15,6 +15,7 @@ angular.module('roastTron', [
 
   'roastTron.roast.detail',
   'roastTron.roast.list',
+  'roastTron.roast.directives',
   'roastTron.roast.services',
 
   'roastTron.temppoint.services'
@@ -45,21 +46,21 @@ angular.module('roastTron', [
   }
 ])
 
-.run(['$route', '$rootScope', '$location', 
-  function ($route, $rootScope, $location) {
-    var original = $location.path;
-    $location.path = function (path, reload) {
-      if (reload === false) {
-        var lastRoute = $route.current;
-        var un = $rootScope.$on('$locationChangeSuccess', function () {
-            $route.current = lastRoute;
-            un();
-        });
-      }
-      return original.apply($location, [path]);
-    };
-  }
-])
+// .run(['$route', '$rootScope', '$location', 
+//   function ($route, $rootScope, $location) {
+//     var original = $location.path;
+//     $location.path = function (path, reload) {
+//       if (reload === false) {
+//         var lastRoute = $route.current;
+//         var un = $rootScope.$on('$locationChangeSuccess', function () {
+//             $route.current = lastRoute;
+//             un();
+//         });
+//       }
+//       return original.apply($location, [path]);
+//     };
+//   }
+// ])
 
 // TODO: Create a shared.filters module.
 .filter('trusthtml', ['$sce', function($sce) {

@@ -20,4 +20,4 @@ class Roast(TimeStampedModel):
 
 
     def __unicode__(self):
-        return u'%s - %s' % (self.name, self.slug)
+        return u'%s: %s' % (unicode(self.coffee), self.name)

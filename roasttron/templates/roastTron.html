@@ -8,7 +8,7 @@
 {% block content %}
 <div ng-app='someController'>
     <div ng-controller="testController">
-        <nvd3 options='options' data='data'></nvd3>
+        <nvd3 options='options' data='data' config='config'></nvd3>
     </div>
 </div>
 {% endblock content %}
@@ -42,8 +42,8 @@ angular.module('routes', [])
     }
   ])
 angular.module('someController', ['nvd3', 'routes', 'roastTron.roast.services'])
-.controller('testController', ['$scope', 'Roast', 
-  function($scope, Roast) {
+.controller('testController', ['$scope', '$timeout', 'Roast', 
+  function($scope, $timeout, Roast) {
     $scope.data = [];
 
     Roast.all().$promise.then(function(response) {
@@ -56,6 +56,18 @@ angular.module('someController', ['nvd3', 'routes', 'roastTron.roast.services'])
         )
       }
     })
+
+    // Test:
+    // var timeoutthing = 20;
+    // var tick = function() {
+    //   $timeout(function() {
+    //     timeoutthing = timeoutthing + 1;
+    //     $scope.data[0]['values'].push({ x: timeoutthing, y: (timeoutthing - 20) * 2 })
+    //     tick();
+    //   }, 1500)
+    // }
+    // tick();
+
     // $scope.data = [{
     //     key: "Profile 1",
     //     values: [
@@ -66,30 +78,39 @@ angular.module('someController', ['nvd3', 'routes', 'roastTron.roast.services'])
     //     ]
     // }];
     $scope.temperature = 'F'
+    $scope.config = {
+      refreshDataOnly: true
+    }
     $scope.options = {
-      "chart": {
-        "type": "lineChart",
-        "height": 450,
-        "margin": {
-          "top": 20,
-          "right": 20,
-          "bottom": 40,
-          "left": 55
+      chart: {
+        type: "lineChart",
+        height: 450,
+        margin: {
+          top: 20,
+          right: 20,
+          bottom: 40,
+          left: 55
         },
-        "useInteractiveGuideline": true,
-        "dispatch": {},
-        "xAxis": {
-          "axisLabel": "Time (seconds)"
+        y: function(d) {
+          return +d.y
         },
-        "yAxis": {
-          "axisLabel": "Temperature (" + $scope.temperature + ")",
+        useInteractiveGuideline: true,
+        dispatch: {},
+        xAxis: {
+          axisLabel: "Time (seconds)"
+        },
+        yAxis: {
+          axisLabel: "Temperature (" + $scope.temperature + ")",
+          tickFormat: function(d){
+            return d3.format('.01f')(d);
+          },
           //"axisLabelDistance": 30
         },
-        "transitionDuration": 250
+        transitionDuration: 250,
       },
-      "title": {
-        "enable": true,
-        "text": "Profiles"
+      title: {
+        enable: true,
+        text: "Profiles"
       }
       // "subtitle": {
       //   "enable": true,

@@ -26,6 +26,7 @@ angular.module('roastTron.coffee.list', [])
     // <-- METHODS
 
     // INIT -->
+    // TODO: Restrict to user-specific coffees
     Coffee.all().$promise.then(
       function(response) {
         $scope.listData = response;

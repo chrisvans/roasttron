@@ -46,7 +46,7 @@ angular.module('roastTron.roast.directives', [])
       link: function(scope, element, attrs) {
         element.bind('click', function() {
           Roast.delete(scope.obj).$promise.then(function(response) {
-            if (scope.index) {
+            if (typeof scope.index !== 'undefined') {
               $rootScope.$broadcast('roast.list.remove', scope.index);
             }
           }, function(error) {

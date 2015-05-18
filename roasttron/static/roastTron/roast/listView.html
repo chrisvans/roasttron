@@ -3,7 +3,7 @@
     + Create a new profile 
   </li>
   <li ng-repeat="object in listData.results">
-    <span ui-sref="coffee.roast.detail({coffeeid:object.coffee, id:object.id})">
+    <span ui-sref="roast.detail({coffeeid:object.coffee, id:object.id})">
       [[ object.name ]]
     </span>
     <span roast-delete
@@ -16,23 +16,21 @@
 <ng-form ng-show="createFormVisible"
          name="createForm">
   <label for="name">
-    Name your profile:
+    Name your profile: [[something.someotherthing]]
   </label>
   <input name="name"
          ng-model="newRoast.name"
+         ng-class="{'errorInput': createForm.name.$touched && createForm.name.$error.required}"
          roast-form-name-input
          placeholder="Name your profile and hit enter to begin"
          required>
   </input>
-  <div ng-show="createForm.name.$touched && createForm.name.$error.required">
-    This field is required.
-  </div>
   <div roast-create
        form="createForm"
        obj="newRoast"> 
     Begin recording
   </div>
-  <div ng-click="hideCreateForm(); initCreateForm();">
+  <div ng-click="hideCreateForm(); initCreateForm(); createForm.$setPristine(); createForm.$setUntouched()">
     Cancel
   </div>
 </ng-form>

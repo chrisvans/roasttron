@@ -8,6 +8,12 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+    <style>
+    .errorInput {
+      border: 1px solid red;
+    }
+    </style>
+
 
     <link rel="stylesheet" href="{% static 'bower_components/nvd3/build/nv.d3.css/' %}">
 
@@ -22,9 +28,6 @@
   </head>
 
   <body ng-app="roastTron" ng-controller="main">
-    <!--<div ng-controller="coffeeListCtrl"
-         ng-include="staticPath.path('roastTron/coffee/listView.html')">
-    </div>-->
     <div>
       <li ui-sref="coffee">
         Back to Coffees

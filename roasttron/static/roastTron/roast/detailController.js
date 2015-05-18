@@ -131,7 +131,7 @@ angular.module('roastTron.roast.detail', [])
       }
     }, function(error) {
       $rootScope.$broadcast('roast.detail.error', error)
-      $state.go('coffee.roast', {coffeeid: $stateParams.coffeeid})
+      $state.go('roast', {coffeeid: $stateParams.coffeeid})
     })
 
     $scope.initChart();

@@ -7,7 +7,6 @@ angular.module('roastTron.roast.list', [])
   ['$rootScope', '$scope', '$timeout', '$state', '$stateParams', 'Roast',
   function($rootScope, $scope, $timeout, $state, $stateParams, Roast) {
 
-
     // --> METHODS
 
     $scope.initCreateForm = function() {
@@ -41,7 +40,7 @@ angular.module('roastTron.roast.list', [])
     // --> LISTENERS
     $scope.$on('roast.list.add', function(event, data) {
       $scope.listData.results.push(data);
-      $state.go('coffee.roast.detail', {coffeeid: data.coffee, id: data.id})
+      $state.go('roast.detail', {coffeeid: data.coffee, id: data.id})
       $timeout(function() {
         $rootScope.$broadcast('roast.detail.recording')
       })

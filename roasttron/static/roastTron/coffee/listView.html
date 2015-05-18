@@ -3,7 +3,7 @@
     + Create a new coffee
   </li>
   <li ng-repeat="object in listData.results">
-    <span ui-sref="coffee.roast({'coffeeid':object.id})">
+    <span ui-sref="roast({'coffeeid':object.id})">
       [[object.name]]
     </span>
     <span coffee-delete 
@@ -21,13 +21,11 @@
   </label>
   <input name="name"
          ng-model="newCoffee.name"
+         ng-class="{'errorInput': createForm.name.$touched && createForm.name.$error.required}"
          coffee-form-name-input
          placeholder="Name your coffee and hit enter"
          required>
   </input>
-  <div ng-show="createForm.name.$touched && createForm.name.$error.required">
-    This field is required.
-  </div>
   <div coffee-create
        form="createForm"
        obj="newCoffee"> 

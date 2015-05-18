@@ -43,12 +43,12 @@ angular.module('roastTron', [
     //   templateUrl: staticPathProvider.path("roastTron/coffee/listView.html"),
     //   controller: 'coffeeDetailCtrl'
     // })
-    .state('coffee.roast', {
-      url: "/:coffeeid/roast",
+    .state('roast', {
+      url: "/coffee/:coffeeid/roast",
       templateUrl: staticPathProvider.path("roastTron/roast/listView.html"),
       controller: 'roastListCtrl'
     })
-    .state('coffee.roast.detail', {
+    .state('roast.detail', {
       url: "/:id",
       templateUrl: staticPathProvider.path("roastTron/roast/detailView.html"),
       controller: 'roastDetailCtrl'

@@ -116,6 +116,10 @@ angular.module('roastTron.roast.detail', [])
       }
       tick()
     }
+
+    $scope.stopRecording = function() {
+      $scope.recording = false;
+    }
     // <-- METHODS
 
     // INIT -->
